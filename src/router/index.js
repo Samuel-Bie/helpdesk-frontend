@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../pages/Home.vue';
 import LoginPage from '../pages/Login.vue';
-import RegisterPage from '../pages/Register.vue';
 import useUserStore from '../store/user';
 
 const routes = [
     {
-        path: '/', 
+        path: '/',
         component: HomePage,
         beforeEnter: (to, from, next) => {
             // Install the user store
@@ -20,7 +19,7 @@ const routes = [
         }
     },
     {
-        path: '/login', 
+        path: '/login',
         component: LoginPage,
         beforeEnter: (to, from, next) => {
             // Install the user store
@@ -33,20 +32,6 @@ const routes = [
             return next();
         }
     },
-    {
-        path: '/register', 
-        component: RegisterPage,
-        beforeEnter: (to, from, next) => {
-            // Install the user store
-            const userStore = useUserStore();
-            // Redirect if user is authenticated
-            if (userStore.userIsAuth === true) {
-                return next('/');
-            }
-            // Allow route entry if user is not authenticated
-            return next();
-        }
-    }
 ];
 
 const router = createRouter({

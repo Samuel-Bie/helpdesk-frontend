@@ -17,10 +17,10 @@
                               <a href="javascript:void(0);" class="right_toggle icon-menu" title="Right Menu"><i class="icon-settings"></i></a>
                             </li>
                             <li>
-                                <!-- 
+                                <!--
                                     REPLACE
                                     <router-link to="/login" class="icon-menu"><i class="icon-power"></i></router-link>
-                                    WITH 
+                                    WITH
                                 -->
                                 <a @click.prevent="loggingOut === false && logUserOut()" href="#" class="icon-menu"><i class="icon-power"></i></a>
                             </li>
@@ -185,30 +185,25 @@
 
       <div id="left-sidebar" class="sidebar">
           <div class="navbar-brand">
-              <router-link to="/"><img src="/assets/images/vue-logo.png" alt="Vue.js Training Logo" class="img-fluid logo" /><span>Vue.js Training</span></router-link>
+              <router-link to="/">
+              <span>Help Desk System</span></router-link>
               <button type="button" class="btn-toggle-offcanvas btn btn-sm btn-default float-right"><i class="lnr lnr-menu fa fa-chevron-circle-left"></i></button>
           </div>
           <div class="sidebar-scroll">
               <div class="user-account">
-                  <div class="user_div">
-                      <img src="/assets/images/user.png" class="user-photo" alt="User Profile Picture" />
-                  </div>
+
                   <div class="dropdown">
                       <span>Welcome,</span>
-                      <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>Christy Wert</strong></a>
+                      <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown"><strong>{{ user.name }}</strong></a>
                       <ul class="dropdown-menu dropdown-menu-right account">
-                            <li>
-                                <a href="#"><i class="icon-user"></i>My Profile</a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a>
-                            </li>
+
+
                             <li class="divider"></li>
                             <li>
-                                <!-- 
+                                <!--
                                     REPLACE
-                                    <a href="#"><i class="icon-power"></i>Logout</a> 
-                                    WITH 
+                                    <a href="#"><i class="icon-power"></i>Logout</a>
+                                    WITH
                                 -->
                                 <a @click.prevent="loggingOut === false && logUserOut()" href="#"><i class="icon-power"></i>Logout</a>
                             </li>
@@ -218,7 +213,7 @@
               <nav id="left-sidebar-nav" class="sidebar-nav">
                   <ul id="main-menu" class="metismenu">
                       <li class="active">
-                          <router-link to="/"><i class="icon-home"></i><span>Dashboard</span></router-link>
+                          <router-link to="/"><i class="icon-home"></i><span>Main</span></router-link>
                       </li>
                   </ul>
               </nav>
@@ -238,119 +233,43 @@
                           </li>
                           <li class="breadcrumb-item active">Dashboard</li>
                       </ul>
-                      <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a>
+                      <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">New Ticket</a>
                   </div>
               </div>
           </div>
 
           <div class="container-fluid">
-              <div class="row clearfix">
-                  <div class="col-12">
-                      <div class="card top_report">
-                          <div class="row clearfix">
-                              <div class="col-lg-3 col-md-6 col-sm-6">
-                                  <div class="body">
-                                      <div class="clearfix">
-                                          <div class="float-left">
-                                              <i class="fa fa-2x fa-dollar text-col-blue"></i>
-                                          </div>
-                                          <div class="number float-right text-right">
-                                              <h6>Total Amount</h6>
-                                              <span class="font700">${{ totalPrice }}</span>
-                                          </div>
-                                      </div>
-                                      <div class="progress progress-xs progress-transparent custom-color-blue mb-0 mt-3">
-                                          <div class="progress-bar" data-transitiongoal="87"></div>
-                                      </div>
-                                      <small class="text-muted">19% compared to last week</small>
-                                  </div>
-                              </div>
-                              <div class="col-lg-3 col-md-6 col-sm-6">
-                                  <div class="body">
-                                      <div class="clearfix">
-                                          <div class="float-left">
-                                              <i class="fa fa-2x fa-bar-chart-o text-col-green"></i>
-                                          </div>
-                                          <div class="number float-right text-right">
-                                              <h6>Total Sales</h6>
-                                              <span class="font700">$500</span>
-                                          </div>
-                                      </div>
-                                      <div class="progress progress-xs progress-transparent custom-color-green mb-0 mt-3">
-                                          <div class="progress-bar" data-transitiongoal="28"></div>
-                                      </div>
-                                      <small class="text-muted">19% compared to last week</small>
-                                  </div>
-                              </div>
-                              <div class="col-lg-3 col-md-6 col-sm-6">
-                                  <div class="body">
-                                      <div class="clearfix">
-                                          <div class="float-left">
-                                              <i class="fa fa-2x fa-file-text text-col-red"></i>
-                                          </div>
-                                          <div class="number float-right text-right">
-                                              <h6>All Items</h6>
-                                              <span class="font700">215</span>
-                                          </div>
-                                      </div>
-                                      <div class="progress progress-xs progress-transparent custom-color-red mb-0 mt-3">
-                                          <div class="progress-bar" data-transitiongoal="41"></div>
-                                      </div>
-                                      <small class="text-muted">19% compared to last week</small>
-                                  </div>
-                              </div>
-                              <div class="col-lg-3 col-md-6 col-sm-6">
-                                  <div class="body">
-                                      <div class="clearfix">
-                                          <div class="float-left">
-                                              <i class="fa fa-2x fa-user text-col-yellow"></i>
-                                          </div>
-                                          <div class="number float-right text-right">
-                                              <h6>All Users</h6>
-                                              <span class="font700">21</span>
-                                          </div>
-                                      </div>
-                                      <div class="progress progress-xs progress-transparent custom-color-yellow mb-0 mt-3">
-                                          <div class="progress-bar" data-transitiongoal="75"></div>
-                                      </div>
-                                      <small class="text-muted">19% compared to last week</small>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+
+
               <div class="row clearfix">
                   <div class="col-lg-12 col-md-12 col-sm-12">
                       <div class="card">
                           <div class="header">
-                              <h2>All Inventory</h2>
+                              <h2>All Ticket</h2>
                           </div>
                           <div class="body">
                               <div class="table-responsive">
                                     <table class="table table-hover js-basic-example dataTable table-custom mb-0">
                                         <thead class="thead-dark">
                                             <tr>
-                                                <th>Date Added</th>
-                                                <th>Name</th>
-                                                <th>Type</th>
-                                                <th>Description</th>
-                                                <th>Price</th>
+                                                <th>Title</th>
+                                                <th>Category</th>
+                                                <th>Priority</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr 
-                                            v-for="(item, index) in inventories"
+                                            <tr
+                                            v-for="(item, index) in tickets"
                                             :key="index">
-                                                <td>{{ item.created_at }}</td>
-                                                <td>{{ item.name }}</td>
-                                                <td>{{ item.type }}</td>
-                                                <td>{{ item.description }}</td>
-                                                <td>${{ item.price }}</td>
+                                                <td>{{ item.title }}</td>
+                                                <td>{{ item.category.name }}</td>
+                                                <td>{{ item.priority }}</td>
                                                 <td>
-                                                    <span v-if="item.status == 1" class="badge badge-success">sold</span>
-                                                    <span v-else class="badge badge-danger">unsold</span>
+                                                    <span v-if="item.status == 'open'" class="badge badge-warning">open</span>
+                                                    <span v-if="item.status == 'closed'" class="badge badge-info">closed</span>
+                                                    <span v-if="item.status == 'on hold'" class="badge badge-danger">on hold</span>
+                                                    <span v-if="item.status == 'in progress'" class="badge badge-success">on progress</span>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -367,7 +286,7 @@
 
 <script>
 import axios from 'axios';
-import useInventoryStore from '../store/inventory';
+import useTicketStore from '../store/ticket';
 import useGeneralStore from '../store/general';
 import useUserStore from '../store/user';
 import { mapState, mapActions } from 'pinia';
@@ -378,19 +297,20 @@ export default {
         }
     },
     computed: {
-        ...mapState(useInventoryStore, [
-            'inventories'
+        ...mapState(useTicketStore, [
+            'tickets'
         ]),
         ...mapState(useGeneralStore, [
             'API_URL'
         ]),
         ...mapState(useUserStore, [
             'token',
-            'userIsAuth'
+            'userIsAuth',
+            'user',
         ]),
         totalPrice() {
             let value = 0;
-            this.inventories.forEach(item => {
+            this.tickets.forEach(item => {
                 value += Number(item.price)
             });
             return value;
@@ -398,10 +318,10 @@ export default {
     },
     watch: {
         userIsAuth() {
-            /* 
+            /*
                 At this point the userIsAuth value is true.
                 On successful logout, after the storeLoggedInUser
-                method is called, the userIsAuth value is 
+                method is called, the userIsAuth value is
                 set to false and this watch property is invoked.
                 The code below will then run.
             */
@@ -409,8 +329,8 @@ export default {
         }
     },
     methods: {
-        ...mapActions(useInventoryStore, [
-            'storeInventories'
+        ...mapActions(useTicketStore, [
+            'storeTickets'
         ]),
         ...mapActions(useUserStore, [
             'logoutUser'
@@ -418,38 +338,39 @@ export default {
         logUserOut() {
             const _this = this;
             _this.loggingOut = true;
-            axios.post(`${_this.API_URL}logout`, {}, {
+            axios.post(`${_this.API_URL}/api/auth/logout`, {}, {
                 headers: {
                     Authorization: `Bearer ${_this.token}`
                 }
-            }).then(RESPONSE => {
-                alert(RESPONSE.data.message);
-            }).catch(ERROR => {
-                console.log(ERROR);
-                alert(ERROR.response.data.message);
+            }).then(reponse => {
+                alert(reponse.data.message);
+            }).catch(error => {
+                console.log(error);
+                alert(error.reponse.data.message);
             }).then(() => {
                 _this.logoutUser();
                 _this.loggingOut = false;
             });
         },
-        fetchInventory() {
+        fetchTicket() {
             const _this = this;
-            axios.get(`${_this.API_URL}inventories`, {
+            axios.get(`${_this.API_URL}/api/tickets`, {
                 headers: {
                     Authorization: `Bearer ${_this.token}`
                 }
-            }).then(RESPONSE => {
-                _this.storeInventories(RESPONSE.data.inventories);
-            }).catch(ERROR => {
-                console.log(ERROR);
-                alert(ERROR.response.data.message);
+            }).then(reponse => {
+
+                _this.storeTickets(reponse.data.data);
+            }).catch(error => {
+                console.log(error);
+                alert(error.reponse.data.message);
             }).then(() => {
                 //
             });
         }
     },
     mounted() {
-        this.fetchInventory();
+        this.fetchTicket();
     }
 }
 </script>

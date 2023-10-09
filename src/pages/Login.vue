@@ -83,10 +83,6 @@
                     ><i class="fa fa-lock"></i
                     ><a href="javascript: void(0);">Forgot password?</a></span
                   >
-                  <span
-                    >Don't have an account?
-                    <router-link to="/register">Register</router-link></span
-                  >
                 </div>
               </form>
             </div>
