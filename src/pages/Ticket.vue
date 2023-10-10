@@ -67,7 +67,9 @@
             <ul class="dropdown-menu dropdown-menu-right account">
               <li class="divider"></li>
               <li>
-                <a @click.prevent="loggingOut === false && logUserOut()" href="#"
+                <a
+                  @click.prevent="loggingOut === false && logUserOut()"
+                  href="#"
                   ><i class="icon-power"></i>Logout</a
                 >
               </li>
@@ -77,7 +79,9 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
           <ul id="main-menu" class="metismenu">
             <li class="active">
-              <router-link to="/"><i class="icon-home"></i><span>Main</span></router-link>
+              <router-link to="/"
+                ><i class="icon-home"></i><span>Main</span></router-link
+              >
             </li>
           </ul>
         </nav>
@@ -95,17 +99,8 @@
               <li class="breadcrumb-item">
                 <router-link to="/"><i class="icon-home"></i></router-link>
               </li>
-              <li class="breadcrumb-item active">Dashboard</li>
+              <li class="breadcrumb-item active">New Ticket</li>
             </ul>
-
-            <button
-              class="btn btn-info"
-              type="button"
-              @click="openNewTicketPage"
-              aria-label=""
-            >
-              New Ticket
-            </button>
           </div>
         </div>
       </div>
@@ -115,46 +110,77 @@
           <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="card">
               <div class="header">
-                <h2>All Ticket</h2>
+                <h2>New Ticket</h2>
               </div>
               <div class="body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-hover js-basic-example dataTable table-custom mb-0"
-                  >
-                    <thead class="thead-dark">
-                      <tr>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in tickets" :key="index">
-                        <td>{{ item.title }}</td>
-                        <td>{{ item.category.name }}</td>
-                        <td>{{ item.priority }}</td>
-                        <td>
-                          <span v-if="item.status == 'open'" class="badge badge-warning"
-                            >open</span
-                          >
-                          <span v-if="item.status == 'closed'" class="badge badge-info"
-                            >closed</span
-                          >
-                          <span v-if="item.status == 'on hold'" class="badge badge-danger"
-                            >on hold</span
-                          >
-                          <span
-                            v-if="item.status == 'in progress'"
-                            class="badge badge-success"
-                            >on progress</span
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <form class="needs-validation" @submit.prevent="submitTicket">
+                  <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <label for="validationCustom01">Ticket Title</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        required
+                        v-model="ticket.title"
+                      />
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                      <label for="validationCustom04">Category</label>
+                      <select
+                        class="custom-select"
+                        id="validationCustom04"
+                        required
+                        v-model="ticket.category"
+                      >
+                        <option
+                          v-for="item in categories"
+                          :key="item.id"
+                          :value="item.id"
+                        >
+                          {{ item.name }}
+                        </option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-3 mb-3">
+                      <label for="validationCustom04">Priority</label>
+                      <select
+                        class="custom-select"
+                        id="validationCustom04"
+                        required
+                        v-model="ticket.priority"
+
+                      >
+                        <option value="low">low</option>
+                        <option value="medium">medium</option>
+                        <option value="high">high</option>
+                      </select>
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="validationCustom02">Image URL</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="validationCustom02"
+                        v-model="ticket.image"
+                      />
+                    </div>
+                    <div class="col-md-12 mb-3">
+                      <label for="exampleFormControlTextarea1"
+                        >Description</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+
+                        v-model="ticket.description"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <button class="btn btn-primary" type="submit">Save</button>
+                </form>
               </div>
             </div>
           </div>
@@ -174,6 +200,15 @@ import { mapState, mapActions } from "pinia";
 export default {
   data: () => {
     return {
+
+      ticket: {
+        title: "",
+        category: "",
+        priority: "",
+        image: "",
+        description: "",
+        status:'open'
+      },
       loggingOut: false,
     };
   },
@@ -229,25 +264,25 @@ export default {
       this.$router.push("/new-ticket");
     },
 
-    fetchTickets() {
+    submitTicket(){
       const _this = this;
+
       axios
-        .get(`${_this.API_URL}/api/tickets`, {
-          headers: {
-            Authorization: `Bearer ${_this.token}`,
-          },
-        })
-        .then((reponse) => {
-          _this.storeTickets(reponse.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.reponse.data.message);
-        })
-        .then(() => {
-          //
-        });
+        .post(
+          `${_this.API_URL}/api/tickets`,
+          {
+            ..._this.ticket,
+             },
+          {
+            headers: {
+              Authorization: `Bearer ${_this.token}`,
+            },
+          }
+        )
     },
+
+
+
 
     fetchCategories() {
       const _this = this;
@@ -261,7 +296,7 @@ export default {
           const categories = reponse.data.data;
           _this.storeCategories(categories);
 
-          console.log(categories)
+          console.log(categories);
         })
         .catch((error) => {
           console.log(error);
@@ -273,7 +308,6 @@ export default {
     },
   },
   mounted() {
-    this.fetchTickets();
     this.fetchCategories();
   },
 };
