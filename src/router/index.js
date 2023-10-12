@@ -3,6 +3,7 @@ import HomePage from '../pages/Home.vue';
 import LoginPage from '../pages/Login.vue';
 
 import TicketPage from '../pages/Ticket.vue';
+import TicketDetails from '../pages/TicketDetails.vue';
 
 import useUserStore from '../store/user';
 
@@ -23,7 +24,36 @@ const routes = [
     },
 
     {
-        path: '/new-ticket',
+        path: '/ticket/create',
+        component: TicketPage,
+        beforeEnter: (to, from, next) => {
+            // Install the user store
+            const userStore = useUserStore();
+            // Redirect if user is not authenticated
+            if (userStore.userIsAuth === false) {
+                return next('/login');
+            }
+            // Allow route entry if user is authenticated
+            return next();
+        }
+    },
+    {
+        path: '/ticket/:id',
+        component: TicketDetails,
+        beforeEnter: (to, from, next) => {
+            // Install the user store
+            const userStore = useUserStore();
+            // Redirect if user is not authenticated
+            if (userStore.userIsAuth === false) {
+                return next('/login');
+            }
+            // Allow route entry if user is authenticated
+            return next();
+        }
+    },
+
+     {
+        path: '/ticket/create',
         component: TicketPage,
         beforeEnter: (to, from, next) => {
             // Install the user store

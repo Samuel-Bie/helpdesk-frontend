@@ -1,48 +1,59 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import { ref , computed} from "vue";
 
-const useUserStore = defineStore('user', {
-    state: () => ({ 
-        token: localStorage.getItem('token') || null,
-        storedUser: localStorage.getItem('user') || null
-    }),
-    getters: {
-        user: state => {
-            if (!!state.storedUser) {
-                return JSON.parse(state.storedUser);
-            }
-            return state.storedUser;
-        },
-        userIsAuth: state => !!state.token,
-    },
-    actions: {
-        storeLoggedInUser(token, user) {
-            const _this = this;
-            
-            // Save the token to localstorage
-            localStorage.setItem('token', token);
-            
-            // Save the user to localstorage
-            const stringifiedUser = JSON.stringify(user);
-            localStorage.setItem('user', stringifiedUser);
+const setup = () => {
+  // State
+  const token = ref("");
+  const storedUser = ref("");
 
-            // Save the token and user to the store state
-            _this.token = token;
-            _this.storedUser = stringifiedUser;
-        },
-        logoutUser() {
-            const _this = this;
-            
-            // Delete the token from localstorage
-            localStorage.removeItem('token');
-            
-            // Delete the user from localstorage
-            localStorage.removeItem('user');
+  // Getters | computed
+  const user = computed(() => {
 
-            // Delete the token and user from the store state
-            _this.token = null;
-            _this.storedUser = null;
-        }
+    if (!!storedUser.value) {
+      return JSON.parse(storedUser.value);
     }
-});
+    return storedUser.value;
+  });
+
+  const userIsAuth = computed(() => !!token.value);
+
+  // Actions | methods
+
+  const storeLoggedInUser = (token_info, user_info) => {
+    // Save the token to localStorage
+    localStorage.setItem("token", token_info);
+
+    // Save the user to localStorage
+    const stringifiedUser = JSON.stringify(user_info);
+    localStorage.setItem("user", stringifiedUser);
+
+    // Save the token and user to the store state
+    token.value = token_info;
+    storedUser.value = stringifiedUser;
+  };
+
+  const logoutUser = () => {
+    // Delete the token from localstorage
+    localStorage.removeItem("token");
+
+    // Delete the user from localstorage
+    localStorage.removeItem("user");
+
+    // Delete the token and user from the store state
+    token = null;
+    storedUser = null;
+  };
+
+  return {
+    token,
+    storedUser,
+    user,
+    userIsAuth,
+    storeLoggedInUser,
+    logoutUser,
+  };
+};
+
+const useUserStore = defineStore("user", setup);
 
 export default useUserStore;

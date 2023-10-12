@@ -5,9 +5,7 @@
         <div class="col-12"></div>
         <div class="col-lg-8">
           <div class="auth_detail">
-            <h2 class="text-monospace">
-              VISONAIRE
-            </h2>
+            <h2 class="text-monospace">VISONAIRE</h2>
             <p>Basic Helpdesk System.</p>
             <ul class="social-links list-unstyled">
               <li class="mr-1">
@@ -43,14 +41,14 @@
             <div class="body">
               <form
                 class="form-auth-small"
-                @submit.prevent="submitting === false && loginUser()"
+                @submit.prevent="loginData.submitting === false && loginUser()"
               >
                 <div class="form-group">
                   <label for="signin-email" class="control-label sr-only"
                     >Email</label
                   >
                   <input
-                    v-model="email"
+                    v-model="loginData.email"
                     type="email"
                     class="form-control"
                     id="signin-email"
@@ -62,7 +60,7 @@
                     >Password</label
                   >
                   <input
-                    v-model="password"
+                    v-model="loginData.password"
                     type="password"
                     class="form-control"
                     id="signin-password"
@@ -93,66 +91,49 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import useGeneralStore from "../store/general";
+<script setup>
+import axios from "../axios";
+import { reactive, ref, computed, watch } from "vue";
+import { useRouter } from "vue-router";
 import useUserStore from "../store/user";
-import { mapActions, mapState } from "pinia";
-export default {
-  data: () => {
-    return {
-      email: "",
-      password: "",
-      submitting: false,
-    };
-  },
-  computed: {
-    ...mapState(useGeneralStore, ["API_URL"]),
-    ...mapState(useUserStore, ["userIsAuth"]),
-  },
-  watch: {
-    userIsAuth() {
-      /*
-                    By default the userIsAuth value is false.
-                    On successful registration, after the storeLoggedInUser
-                    method is called, the userIsAuth value is
-                    set to true and this watch property is invoked.
-                    The code below will then run.
-                */
-      this.$router.push("/");
-    },
-  },
-  methods: {
-    ...mapActions(useUserStore, ["storeLoggedInUser"]),
-    loginUser() {
-      const _this = this;
 
-      axios.get(`${_this.API_URL}/sanctum/csrf-cookie`).then((response) => {
-        _this.submitting = true;
-        axios
-          .post(`${_this.API_URL}/api/auth/token`, {
-            email: _this.email,
-            password: _this.password,
-          })
-          .then((RESPONSE) => {
-            const token = RESPONSE.data.token;
-            const user = RESPONSE.data.user;
-            _this.storeLoggedInUser(token, user);
+const userStore = useUserStore();
+const router = useRouter();
 
+const loginData = reactive({
+  email: "employee.user@test.com",
+  password: "password",
+  submitting: false,
+});
 
-            console.log(token, user)
-          })
-          .catch((ERROR) => {
-            console.log(ERROR);
-            alert(ERROR.response.data.message);
-          })
-          .then(() => {
-            _this.submitting = false;
-          });
+const userIsAuth = computed(() => {
+  return userStore.userIsAuth;
+});
+
+watch(userIsAuth, () => {
+  /**
+   * By default the userIsAuth value is false.
+   * On successful registration, after the storeLoggedInUser
+   * method is called, the userIsAuth value is
+   * set to true and this watch property is invoked.
+   * The code below will then run.
+   * If the user is authenticated, redirect to the home page.
+   */
+  router.push("/");
+});
+
+const loginUser = () => {
+  axios({
+    baseURL: "http://localhost/sanctum/csrf-cookie",
+    withCredentials: true,
+  })
+    .then((response) => {
+      axios.post("/auth/token", loginData).then((response) => {
+        userStore.storeLoggedInUser(response.data.token, response.data.user);
       });
-    },
-  },
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 </script>
-
-<style></style>
