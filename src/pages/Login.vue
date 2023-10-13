@@ -5,8 +5,24 @@
         <div class="col-12"></div>
         <div class="col-lg-8">
           <div class="auth_detail">
-            <h2 class="text-monospace">VISONAIRE</h2>
-            <p>Basic Helpdesk System.</p>
+            <h2 class="text-monospace">Help Desk System Front end app</h2>
+            <p>For testing perposes use the following credentials.</p>
+            <p>
+              <pre class="text-white">
+'name' => 'Employee User',
+'email' => 'employee.user@test.com',
+'password' => password,
+
+
+'name' => 'Regular User',
+'email' => 'regular.user@test.com',
+'password' => password,
+
+              </pre>
+
+
+
+             </p>
             <ul class="social-links list-unstyled">
               <li class="mr-1">
                 <a

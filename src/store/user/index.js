@@ -15,7 +15,7 @@ const setup = () => {
     if (!!storedUser.value) return JSON.parse(storedUser.value);
 
     const userData = localStorage.getItem("user");
-    if (!!userData)  return JSON.parse(userData);
+    if (!!userData) return JSON.parse(userData);
     return false;
   });
 
@@ -24,7 +24,7 @@ const setup = () => {
     const userToken = localStorage.getItem("token");
     if (!!userToken) return userToken;
     return false;
-  })
+  });
 
   const userIsAuth = computed(() => {
     if (!!token.value) return true;
@@ -46,6 +46,9 @@ const setup = () => {
     // Save the token and user to the store state
     token.value = token_info;
     storedUser.value = stringifiedUser;
+
+    const userToken = localStorage.getItem("token");
+
   };
 
   const logoutUser = () => {
@@ -65,19 +68,19 @@ const setup = () => {
 
   const getUserInfo = async (id) => {
     const user = await axios
-    .get(`/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${storedToken}`,
-      },
-    })
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+      .get(`/users/${id}`, {
+        headers: {
+          Authorization: `Bearer ${storedToken}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return user;
-  }
+  };
 
   return {
     token,

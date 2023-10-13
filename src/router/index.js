@@ -2,8 +2,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomePage from "@/pages/Home.vue";
 import LoginPage from "@/pages/Login.vue";
 
-import TicketPage from "@/pages/Ticket.vue";
-import TicketDetails from "@/pages/TicketDetails.vue";
 
 import TicketIndex from "@/pages/Ticket/Index.vue";
 import TicketCreate from "@/pages/Ticket/Create.vue";

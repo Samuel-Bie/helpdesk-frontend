@@ -3,9 +3,9 @@ import { reactive, computed } from "vue";
 
 import axios from "@/axios";
 
-const userToken = localStorage.getItem("token");
-
 const setup = () => {
+  const userToken = localStorage.getItem("token");
+
   // state | data
   const allTickets = reactive([]);
 
@@ -17,6 +17,7 @@ const setup = () => {
   // actions | methods
 
   const index = () => {
+    console.log(userToken);
     axios
       .get(`/tickets`, {
         headers: {
@@ -80,6 +81,24 @@ const setup = () => {
     return databaseTicket;
   };
 
+  const showFullHistory = async (id) => {
+
+    const databaseTicket = await axios
+      .get(`/tickets/${id}/history`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return databaseTicket;
+  };
+
   const addTicket = (ticket) => {
     allTickets.push(ticket);
   };
@@ -94,7 +113,9 @@ const setup = () => {
     store,
     destroy,
     update,
+
     show,
+    showFullHistory,
 
     tickets,
     removeTicket,

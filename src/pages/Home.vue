@@ -143,6 +143,7 @@ const logUserOut = () => {
     .then(() => {
       userStore.logoutUser();
       loggingOut.value = false;
+      router.replace("login")
     });
 };
 </script>

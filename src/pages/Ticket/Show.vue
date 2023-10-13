@@ -17,8 +17,8 @@
 
           <div class="col-md-4">
             <strong>Attached image: </strong>
-            <br>
-            <img :src="data.ticket.image" />
+            <br />
+            <img style="max-width: 200px" :src="data.ticket.image" />
           </div>
         </div>
         <hr class="my-0" />
@@ -33,6 +33,12 @@
         </p>
       </div>
     </div>
+
+    <div class="mt-1">
+      <CreateForm :ticket="data.ticket" @newMessage="loadTicket" />
+
+      <!-- <Messages :ticket="data.ticket" /> -->
+    </div>
   </div>
 </template>
 
@@ -41,9 +47,12 @@ import { defineProps, onMounted, ref, reactive } from "vue";
 import useTicketStore from "@/store/ticket";
 import useUserStore from "@/store/user";
 
+import Messages from "@/components/Messages/Index.vue";
+import CreateForm from "@/components/Messages/Create.vue";
+
 const ticketStore = useTicketStore();
 const userStore = useUserStore();
-
+//
 const props = defineProps({
   id: {
     required: true,
@@ -54,11 +63,16 @@ const data = reactive({
   ticket: {},
 });
 
-// Lifecycle hooks
-onMounted(async () => {
-  data.ticket = await ticketStore.show(props.id);
+// Actions | Methods
+const loadTicket = async () => {
+  data.ticket = await ticketStore.showFullHistory(props.id);
   userStore.getUserInfo(data.ticket.creator_user_id).then((result) => {
     data.ticket.user = result;
   });
+};
+
+// Lifecycle hooks
+onMounted(() => {
+  loadTicket();
 });
 </script>

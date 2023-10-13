@@ -5,7 +5,8 @@
         <h2>Create Ticket</h2>
       </div>
       <div class="body">
-        <form class="needs-validation" @submit.prevent="submitTicket">
+        <form
+        class="needs-validation" @submit.prevent="submitTicket">
           <div class="form-row">
             <div class="col-md-6 mb-3">
               <label for="validationCustom01">Ticket Title</label>
