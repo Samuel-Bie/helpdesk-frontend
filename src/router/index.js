@@ -1,87 +1,51 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomePage from "../pages/Home.vue";
-import LoginPage from "../pages/Login.vue";
+import HomePage from "@/pages/Home.vue";
+import LoginPage from "@/pages/Login.vue";
 
-import TicketPage from "../pages/Ticket.vue";
-import TicketDetails from "../pages/TicketDetails.vue";
+import TicketPage from "@/pages/Ticket.vue";
+import TicketDetails from "@/pages/TicketDetails.vue";
 
-import TicketIndex from "../pages/Ticket/Index.vue";
+import TicketIndex from "@/pages/Ticket/Index.vue";
+import TicketCreate from "@/pages/Ticket/Create.vue";
+import TicketShow from "@/pages/Ticket/Show.vue";
 
-import useUserStore from "../store/user";
+import useUserStore from "@/store/user";
 
 const routes = [
   {
     path: "/",
     component: HomePage,
     redirect: "/tickets",
-    beforeEnter: (to, from, next) => {
-      // Install the user store
-      const userStore = useUserStore();
-      // Redirect if user is not authenticated
-      if (userStore.userIsAuth === false) {
-        return next("/login");
-      }
-      // Allow route entry if user is authenticated
-      return next();
+
+    meta: {
+      middleware: "auth",
     },
+
     children: [
       {
         path: "/tickets",
         component: TicketIndex,
-        beforeEnter: (to, from, next) => {
-          // Install the user store
-          const userStore = useUserStore();
-          // Redirect if user is not authenticated
-          if (userStore.userIsAuth === false) {
-            return next("/login");
-          }
-          // Allow route entry if user is authenticated
-          return next();
+        meta: {
+          middleware: "auth",
         },
+
       },
 
       {
-        path: "/ticket/create",
-        component: TicketPage,
-        beforeEnter: (to, from, next) => {
-          // Install the user store
-          const userStore = useUserStore();
-          // Redirect if user is not authenticated
-          if (userStore.userIsAuth === false) {
-            return next("/login");
-          }
-          // Allow route entry if user is authenticated
-          return next();
+        path: "/tickets/create",
+        component: TicketCreate,
+        meta: {
+          middleware: "auth",
         },
-      },
-      {
-        path: "/ticket/:id",
-        component: TicketDetails,
-        beforeEnter: (to, from, next) => {
-          // Install the user store
-          const userStore = useUserStore();
-          // Redirect if user is not authenticated
-          if (userStore.userIsAuth === false) {
-            return next("/login");
-          }
-          // Allow route entry if user is authenticated
-          return next();
-        },
-      },
 
+      },
       {
-        path: "/ticket/create",
-        component: TicketPage,
-        beforeEnter: (to, from, next) => {
-          // Install the user store
-          const userStore = useUserStore();
-          // Redirect if user is not authenticated
-          if (userStore.userIsAuth === false) {
-            return next("/login");
-          }
-          // Allow route entry if user is authenticated
-          return next();
+        path: "/tickets/:id",
+        component: TicketShow,
+        meta: {
+          middleware: "auth",
         },
+
       },
     ],
   },
@@ -108,6 +72,21 @@ const router = createRouter({
   },
   history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta?.middleware) {
+    if (to.meta?.middleware === "auth") {
+      // Install the user store
+      const userStore = useUserStore();
+      // Redirect if user is not authenticated
+      if (userStore.userIsAuth === false) {
+        return next("/login");
+      }
+      // Allow route entry if user is authenticated
+      return next();
+    } else return next();
+  } else return next();
 });
 
 export default router;
