@@ -1,4 +1,4 @@
-import { defineStore, storeToRefs } from "pinia";
+import { defineStore } from "pinia";
 import { reactive, computed } from "vue";
 
 import axios from "@/axios";
@@ -36,23 +36,24 @@ const setup = () => {
       });
   };
 
-  const store = (data) => {
-    const _this = this;
-    axios
-      .post(
-        `${_this.API_URL}/api/tickets`,
-        {
-          ..._this.ticket,
+  const store = async (data) => {
+    const response = await axios.post(
+      `/tickets`,
+      {
+        ...data,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${_this.token}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data);
-      });
+      }
+    ).then((response) => {
+      const ticket = response.data
+      addTicket(ticket);
+      return ticket
+    });
+
+    return response;
   };
 
   const destroy = (id) => {};
@@ -76,7 +77,6 @@ const setup = () => {
     show,
 
     tickets,
-    addTicket,
     removeTicket,
   };
 };

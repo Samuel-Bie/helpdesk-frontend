@@ -24,6 +24,7 @@ const routes = [
     children: [
       {
         path: "/tickets",
+        name:'tickets.index',
         component: TicketIndex,
         meta: {
           middleware: "auth",
@@ -33,6 +34,7 @@ const routes = [
 
       {
         path: "/tickets/create",
+        name:'tickets.create',
         component: TicketCreate,
         meta: {
           middleware: "auth",
@@ -41,11 +43,12 @@ const routes = [
       },
       {
         path: "/tickets/:id",
+        name:'tickets.show',
         component: TicketShow,
         meta: {
           middleware: "auth",
         },
-
+        props: true
       },
     ],
   },

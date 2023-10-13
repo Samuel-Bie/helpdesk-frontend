@@ -101,7 +101,7 @@
               </li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ul>
-            <router-link class="btn btn-info" to="/ticket/create"
+            <router-link class="btn btn-info" to="/tickets/create"
               >New Ticket</router-link
             >
           </div>
