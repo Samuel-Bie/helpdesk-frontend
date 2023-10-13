@@ -67,9 +67,7 @@
             <ul class="dropdown-menu dropdown-menu-right account">
               <li class="divider"></li>
               <li>
-                <a
-                  @click.prevent="loggingOut === false && logUserOut()"
-                  href="#"
+                <a @click.prevent="loggingOut === false && logUserOut()" href="#"
                   ><i class="icon-power"></i>Logout</a
                 >
               </li>
@@ -79,9 +77,7 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
           <ul id="main-menu" class="metismenu">
             <li class="active">
-              <router-link to="/"
-                ><i class="icon-home"></i><span>Main</span></router-link
-              >
+              <router-link to="/"><i class="icon-home"></i><span>Main</span></router-link>
             </li>
           </ul>
         </nav>

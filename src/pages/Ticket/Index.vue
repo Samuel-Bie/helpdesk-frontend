@@ -15,6 +15,7 @@
                 <th>Category</th>
                 <th>Priority</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -40,6 +41,17 @@
                     >on progress</span
                   >
                 </td>
+
+                <td>
+                  <router-link
+                    :to="{ name: 'tickets.show', params: { id: item.id } }"
+                  >
+                    <span class="badge badge-secondary">
+                      <span class="icon-eye"></span>
+                      details</span
+                    >
+                  </router-link>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -50,13 +62,11 @@
 </template>
 
 <script setup>
-
 import useTicketStore from "@/store/ticket";
 
 const ticketStore = useTicketStore();
 
-ticketStore.index()
+ticketStore.index();
 
 const tickets = ticketStore.tickets;
-
 </script>

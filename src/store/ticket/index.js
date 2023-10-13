@@ -37,28 +37,48 @@ const setup = () => {
   };
 
   const store = async (data) => {
-    const response = await axios.post(
-      `/tickets`,
-      {
-        ...data,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${userToken}`,
+    const response = await axios
+      .post(
+        `/tickets`,
+        {
+          ...data,
         },
-      }
-    ).then((response) => {
-      const ticket = response.data
-      addTicket(ticket);
-      return ticket
-    });
+        {
+          headers: {
+            Authorization: `Bearer ${userToken}`,
+          },
+        }
+      )
+      .then((response) => {
+        const ticket = response.data;
+        addTicket(ticket);
+        return ticket;
+      });
 
     return response;
   };
 
   const destroy = (id) => {};
   const update = (id, data) => {};
-  const show = (id) => {};
+  const show = async (id) => {
+    const localTicket = allTickets.find((ticket) => ticket.id === id);
+
+    if (localTicket) return localTicket;
+    const databaseTicket = await axios
+      .get(`/tickets/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    return databaseTicket;
+  };
 
   const addTicket = (ticket) => {
     allTickets.push(ticket);

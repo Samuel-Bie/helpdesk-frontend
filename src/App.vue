@@ -1,4 +1,5 @@
 <template>
-  <router-view></router-view>
+  <transition name="fade-in-up">
+    <router-view />
+  </transition>
 </template>
- 

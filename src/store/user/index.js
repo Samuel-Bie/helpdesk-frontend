@@ -1,6 +1,10 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
+import axios from "@/axios";
+
+const storedToken = localStorage.getItem("token");
+
 const setup = () => {
   // State
   const token = ref("");
@@ -59,12 +63,30 @@ const setup = () => {
     storedUser.value = null;
   };
 
+  const getUserInfo = async (id) => {
+    const user = await axios
+    .get(`/users/${id}`, {
+      headers: {
+        Authorization: `Bearer ${storedToken}`,
+      },
+    })
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    return user;
+  }
+
   return {
     token,
     userToken,
     storedUser,
     user,
     userIsAuth,
+
+    getUserInfo,
     storeLoggedInUser,
     logoutUser,
   };

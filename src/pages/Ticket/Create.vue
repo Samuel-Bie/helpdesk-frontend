@@ -89,7 +89,7 @@ const ticket = reactive({
   title: "",
   category: "",
   priority: "",
-  image: "",
+  image: "https://www.kasandbox.org/programming-images/avatars/duskpin-seedling.png",
   description: "",
   status: "open",
 });
