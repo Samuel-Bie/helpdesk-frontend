@@ -33,12 +33,18 @@
         </p>
 
         <div>
-          <button type="button" class="btn btn-outline-primary">Update</button>
+          <button
+            type="button"
+            v-if="isCreator"
+            class="btn btn-outline-primary ml-1"
+          >
+            Update
+          </button>
           <button
             v-if="isCreator"
             @click="deleteTicket"
             type="button"
-            class="btn btn-outline-warning mx-1"
+            class="btn btn-outline-warning ml-1"
           >
             Delete
           </button>
