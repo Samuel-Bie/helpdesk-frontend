@@ -62,12 +62,14 @@
               href="javascript:void(0);"
               class="dropdown-toggle user-name"
               data-toggle="dropdown"
-              ><strong>{{ user.name }}</strong></a
+              ><strong>{{ userStore.user.name }}</strong></a
             >
             <ul class="dropdown-menu dropdown-menu-right account">
               <li class="divider"></li>
               <li>
-                <a @click.prevent="loggingOut === false && logUserOut()" href="#"
+                <a
+                  @click.prevent="loggingOut === false && logUserOut()"
+                  href="#"
                   ><i class="icon-power"></i>Logout</a
                 >
               </li>
@@ -77,7 +79,9 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
           <ul id="main-menu" class="metismenu">
             <li class="active">
-              <router-link to="/"><i class="icon-home"></i><span>Main</span></router-link>
+              <router-link to="/"
+                ><i class="icon-home"></i><span>Main</span></router-link
+              >
             </li>
           </ul>
         </nav>
@@ -97,15 +101,9 @@
               </li>
               <li class="breadcrumb-item active">Dashboard</li>
             </ul>
-
-            <button
-              class="btn btn-info"
-              type="button"
-              @click="openNewTicketPage"
-              aria-label=""
+            <router-link class="btn btn-info" to="/ticket/create"
+              >New Ticket</router-link
             >
-              New Ticket
-            </button>
           </div>
         </div>
       </div>
@@ -113,50 +111,7 @@
       <div class="container-fluid">
         <div class="row clearfix">
           <div class="col-lg-12 col-md-12 col-sm-12">
-            <div class="card">
-              <div class="header">
-                <h2>All Ticket</h2>
-              </div>
-              <div class="body">
-                <div class="table-responsive">
-                  <table
-                    class="table table-hover js-basic-example dataTable table-custom mb-0"
-                  >
-                    <thead class="thead-dark">
-                      <tr>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in tickets" :key="index">
-                        <td>{{ item.title }}</td>
-                        <td>{{ item.category.name }}</td>
-                        <td>{{ item.priority }}</td>
-                        <td>
-                          <span v-if="item.status == 'open'" class="badge badge-warning"
-                            >open</span
-                          >
-                          <span v-if="item.status == 'closed'" class="badge badge-info"
-                            >closed</span
-                          >
-                          <span v-if="item.status == 'on hold'" class="badge badge-danger"
-                            >on hold</span
-                          >
-                          <span
-                            v-if="item.status == 'in progress'"
-                            class="badge badge-success"
-                            >on progress</span
-                          >
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+            <router-view></router-view>
           </div>
         </div>
       </div>
@@ -164,117 +119,34 @@
   </div>
 </template>
 
-<script>
-import axios from "axios";
-import useTicketStore from "../store/ticket";
-import useCategoryStore from "../store/category";
-import useGeneralStore from "../store/general";
+<script setup>
+import { useRouter, useRoute } from "vue-router";
+
+import { ref } from "vue";
+import axios from "../axios";
 import useUserStore from "../store/user";
-import { mapState, mapActions } from "pinia";
-export default {
-  data: () => {
-    return {
-      loggingOut: false,
-    };
-  },
-  computed: {
-    ...mapState(useTicketStore, ["tickets"]),
-    ...mapState(useCategoryStore, ["categories"]),
-    ...mapState(useGeneralStore, ["API_URL"]),
-    ...mapState(useUserStore, ["token", "userIsAuth", "user"]),
-  },
-  watch: {
-    userIsAuth() {
-      /*
-                At this point the userIsAuth value is true.
-                On successful logout, after the storeLoggedInUser
-                method is called, the userIsAuth value is
-                set to false and this watch property is invoked.
-                The code below will then run.
-            */
-      this.$router.push("/login");
-    },
-  },
-  methods: {
-    ...mapActions(useTicketStore, ["storeTickets"]),
-    ...mapActions(useCategoryStore, ["storeCategories"]),
-    ...mapActions(useUserStore, ["logoutUser"]),
-    logUserOut() {
-      const _this = this;
-      _this.loggingOut = true;
-      axios
-        .post(
-          `${_this.API_URL}/api/auth/logout`,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${_this.token}`,
-            },
-          }
-        )
-        .then((reponse) => {
-          alert(reponse.data.message);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.reponse.data.message);
-        })
-        .then(() => {
-          _this.logoutUser();
-          _this.loggingOut = false;
-        });
-    },
 
-    openNewTicketPage() {
-      this.$router.push("/new-ticket");
-    },
+const router = useRouter();
+const userStore = useUserStore();
+const loggingOut = ref(false);
 
-    fetchTickets() {
-      const _this = this;
-      axios
-        .get(`${_this.API_URL}/api/tickets`, {
-          headers: {
-            Authorization: `Bearer ${_this.token}`,
-          },
-        })
-        .then((reponse) => {
-          _this.storeTickets(reponse.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.reponse.data.message);
-        })
-        .then(() => {
-          //
-        });
-    },
+const logUserOut = () => {
+  loggingOut.value = true;
 
-    fetchCategories() {
-      const _this = this;
-      axios
-        .get(`${_this.API_URL}/api/categories`, {
-          headers: {
-            Authorization: `Bearer ${_this.token}`,
-          },
-        })
-        .then((reponse) => {
-          const categories = reponse.data.data;
-          _this.storeCategories(categories);
-
-          console.log(categories)
-        })
-        .catch((error) => {
-          console.log(error);
-          alert(error.reponse.data.message);
-        })
-        .then(() => {
-          //
-        });
-    },
-  },
-  mounted() {
-    this.fetchTickets();
-    this.fetchCategories();
-  },
+  const token = userStore.userToken;
+  axios
+    .post(
+      "auth/logout",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then(() => {
+      userStore.logoutUser();
+      loggingOut.value = false;
+    });
 };
 </script>

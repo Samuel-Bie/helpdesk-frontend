@@ -1,0 +1,62 @@
+<template>
+  <div>
+    <div class="card">
+      <div class="header">
+        <h2>All Tickets</h2>
+      </div>
+      <div class="body">
+        <div class="table-responsive">
+          <table
+            class="table table-hover js-basic-example dataTable table-custom mb-0"
+          >
+            <thead class="thead-dark">
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in tickets" :key="index">
+                <td>{{ item.title }}</td>
+                <td>{{ item.category.name }}</td>
+                <td>{{ item.priority }}</td>
+                <td>
+                  <span v-if="item.status == 'open'" class="badge badge-warning"
+                    >open</span
+                  >
+                  <span v-if="item.status == 'closed'" class="badge badge-info"
+                    >closed</span
+                  >
+                  <span
+                    v-if="item.status == 'on hold'"
+                    class="badge badge-danger"
+                    >on hold</span
+                  >
+                  <span
+                    v-if="item.status == 'in progress'"
+                    class="badge badge-success"
+                    >on progress</span
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+
+import useTicketStore from "@/store/ticket";
+
+const ticketStore = useTicketStore();
+
+ticketStore.index()
+
+const tickets = ticketStore.tickets;
+
+</script>

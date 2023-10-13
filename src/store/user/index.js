@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { ref , computed} from "vue";
+import { ref, computed } from "vue";
 
 const setup = () => {
   // State
@@ -8,14 +8,26 @@ const setup = () => {
 
   // Getters | computed
   const user = computed(() => {
+    if (!!storedUser.value) return JSON.parse(storedUser.value);
 
-    if (!!storedUser.value) {
-      return JSON.parse(storedUser.value);
-    }
-    return storedUser.value;
+    const userData = localStorage.getItem("user");
+    if (!!userData)  return JSON.parse(userData);
+    return false;
   });
 
-  const userIsAuth = computed(() => !!token.value);
+  const userToken = computed(() => {
+    if (!!token.value) return token.value;
+    const userToken = localStorage.getItem("token");
+    if (!!userToken) return userToken;
+    return false;
+  })
+
+  const userIsAuth = computed(() => {
+    if (!!token.value) return true;
+    const userToken = localStorage.getItem("token");
+    if (!!userToken) return true;
+    return false;
+  });
 
   // Actions | methods
 
@@ -39,13 +51,17 @@ const setup = () => {
     // Delete the user from localstorage
     localStorage.removeItem("user");
 
+    // To confirm that everything has been deleted
+    localStorage.clear();
+
     // Delete the token and user from the store state
-    token = null;
-    storedUser = null;
+    token.value = null;
+    storedUser.value = null;
   };
 
   return {
     token,
+    userToken,
     storedUser,
     user,
     userIsAuth,
