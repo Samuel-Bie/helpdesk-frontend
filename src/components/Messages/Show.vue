@@ -3,6 +3,10 @@
     <div class="card">
       <div class="card-body">
         <p>{{ message.content }}</p>
+
+        <p v-if="!!message.image">
+          <a target="_blank" :href="message.image" class="link">Attachment</a>
+        </p>
         <footer class="blockquote-footer">
           {{ message.full_user_info.name }}
           <cite title="Source Title">at {{ dateTime }}</cite>
