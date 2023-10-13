@@ -59,7 +59,20 @@ const setup = () => {
     return response;
   };
 
-  const destroy = (id) => {};
+  const destroy = async (id) => {
+    const result = await axios
+      .delete(`/tickets/${id}`, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      })
+      .then((response) => {
+        removeTicket(id);
+        return true;
+      });
+
+    return result;
+  };
   const update = (id, data) => {};
   const show = async (id) => {
     const localTicket = allTickets.find((ticket) => ticket.id === id);
@@ -82,7 +95,6 @@ const setup = () => {
   };
 
   const showFullHistory = async (id) => {
-
     const databaseTicket = await axios
       .get(`/tickets/${id}/history`, {
         headers: {
@@ -103,9 +115,11 @@ const setup = () => {
     allTickets.push(ticket);
   };
 
-  const removeTicket = (ticket) => {
-    const index = allTickets.indexOf(ticket);
-    allTickets.splice(index, 1);
+  const removeTicket = (id) => {
+    const updatedTickets = allTickets.filter((ticket) => ticket.id !== id);
+
+    allTickets.splice(0);
+    allTickets.push(...updatedTickets);
   };
 
   return {

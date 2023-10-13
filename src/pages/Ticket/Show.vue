@@ -31,6 +31,19 @@
           <strong>Feedback: </strong> <br />
           {{ data.ticket.feedback_notes }}
         </p>
+
+        <div>
+          <button type="button" class="btn btn-outline-primary">Update</button>
+          <button
+            v-if="isCreator"
+            @click="deleteTicket"
+            type="button"
+            class="btn btn-outline-warning mx-1"
+          >
+            Delete
+          </button>
+          <button type="button" class="btn btn-outline-success">Close</button>
+        </div>
       </div>
     </div>
 
@@ -45,7 +58,9 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, ref, reactive } from "vue";
+import { useRouter } from "vue-router";
+
+import { defineProps, onMounted, ref, reactive, computed } from "vue";
 import useTicketStore from "@/store/ticket";
 import useUserStore from "@/store/user";
 
@@ -54,6 +69,7 @@ import CreateForm from "@/components/Messages/Create.vue";
 
 const ticketStore = useTicketStore();
 const userStore = useUserStore();
+const router = useRouter();
 
 // Props
 const props = defineProps({
@@ -75,11 +91,21 @@ const loadTicket = async () => {
   data.ticket = await ticketStore.showFullHistory(props.id);
   isLoadingTicket.value = false;
 
-
   userStore.getUserInfo(data.ticket.creator_user_id).then((result) => {
     data.ticket.user = result;
   });
 };
+
+const deleteTicket = () => {
+  ticketStore.destroy(data.ticket.id).then((response) => {
+    router.push("/");
+  });
+};
+
+// Computed
+const isCreator = computed(() => {
+  return userStore.user.id === data.ticket.user?.id;
+});
 
 // Lifecycle hooks
 onMounted(() => {
