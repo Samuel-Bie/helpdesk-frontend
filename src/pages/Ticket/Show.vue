@@ -37,7 +37,9 @@
     <div class="mt-1">
       <CreateForm :ticket="data.ticket" @newMessage="loadTicket" />
 
-      <!-- <Messages :ticket="data.ticket" /> -->
+      <div v-if="!isLoadingTicket">
+        <Messages :messages="data.ticket.messages" />
+      </div>
     </div>
   </div>
 </template>
@@ -52,20 +54,28 @@ import CreateForm from "@/components/Messages/Create.vue";
 
 const ticketStore = useTicketStore();
 const userStore = useUserStore();
-//
+
+// Props
 const props = defineProps({
   id: {
     required: true,
   },
 });
 
+// State | data
 const data = reactive({
   ticket: {},
 });
 
+const isLoadingTicket = ref(true);
+
 // Actions | Methods
 const loadTicket = async () => {
+  isLoadingTicket.value = true;
   data.ticket = await ticketStore.showFullHistory(props.id);
+  isLoadingTicket.value = false;
+
+
   userStore.getUserInfo(data.ticket.creator_user_id).then((result) => {
     data.ticket.user = result;
   });

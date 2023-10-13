@@ -5,7 +5,7 @@
         <form class="needs-validation" @submit.prevent="sendMessage">
           <div class="form-group">
             <label for="exampleFormControlTextarea1"
-              >Type below your message, {{ props.ticket.id }}</label
+              >Type below your message</label
             >
             <textarea
               class="form-control"
@@ -36,8 +36,6 @@
 <script setup>
 import { reactive, defineProps, defineEmits } from "vue";
 
-import useUserStore from "@/store/user";
-import useTicketStore from "@/store/ticket";
 import useMessageStore from "@/store/message";
 
 
