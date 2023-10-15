@@ -20,7 +20,20 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in tickets" :key="index">
-                <td>{{ item.title }}</td>
+                <td>
+                  <span
+                    v-if="isMine(item)"
+                    class="badge badge-success"
+                    >Me</span
+                  >
+
+                  <span
+                    v-else
+                    class="badge badge-success"
+                    >User</span
+                  >
+
+                {{ item.title }}</td>
                 <td>{{ item.category.name }}</td>
                 <td>{{ item.priority }}</td>
                 <td>
@@ -63,10 +76,18 @@
 
 <script setup>
 import useTicketStore from "@/store/ticket";
+import useUserStore from "@/store/user";
 
+const userStore = useUserStore();
 const ticketStore = useTicketStore();
 
 ticketStore.index();
 
 const tickets = ticketStore.tickets;
+
+// action | methods
+const isMine = (ticket) => {
+  return userStore.user.id === ticket.user?.creator_user_id;
+}
+
 </script>
