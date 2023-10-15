@@ -3,9 +3,9 @@ import { reactive, computed } from "vue";
 
 import axios from "@/axios";
 
-const userToken = localStorage.getItem("token");
-
 const setup = () => {
+  const userToken = localStorage.getItem("token");
+
   // state | data
   const allCategories = reactive([]);
 

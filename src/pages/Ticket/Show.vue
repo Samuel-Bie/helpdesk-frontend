@@ -36,7 +36,7 @@
           <button
             type="button"
             v-if="isCreator"
-            class="btn btn-outline-primary ml-1"
+            class="btn btn-outline-primary mr-1"
           >
             Update
           </button>
@@ -44,11 +44,12 @@
             v-if="isCreator"
             @click="deleteTicket"
             type="button"
-            class="btn btn-outline-warning ml-1"
+            class="btn btn-outline-warning mr-1"
           >
             Delete
           </button>
-          <button type="button" class="btn btn-outline-success">Close</button>
+          <button type="button" v-if="data.ticket.status!='closed'" @click="changeTicketStatus('closed')" class="btn btn-outline-success">Close</button>
+          <button type="button" v-if="data.ticket.status=='closed'" @click="changeTicketStatus('open')" class="btn btn-outline-info">Open</button>
         </div>
       </div>
     </div>
@@ -107,6 +108,18 @@ const deleteTicket = () => {
     router.push("/");
   });
 };
+
+const changeTicketStatus = (status) => {
+  const payload = {
+    status: status
+  }
+  ticketStore.updateStatus(data.ticket.id, {...payload}).then((response) => {
+
+    const result = response;
+
+    data.ticket.status = result.status
+  });
+}
 
 // Computed
 const isCreator = computed(() => {

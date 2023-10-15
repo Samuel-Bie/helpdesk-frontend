@@ -73,7 +73,45 @@ const setup = () => {
 
     return result;
   };
-  const update = (id, data) => {};
+
+  const update = async (id, data) => {
+    const result = await axios
+    .put(`/tickets/${id}`,
+    {
+      ...data,
+    },
+     {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+    .then((response) => {
+      console.log(response.data)
+       return response.data;
+    });
+
+  return result;
+  };
+
+  const updateStatus = async(id, data) => {
+    const result = await axios
+    .patch(`/tickets/${id}/status`,
+    {
+      ...data,
+    },
+     {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+    })
+    .then((response) => {
+       return response.data;
+    });
+
+  return result;
+  }
+
+
   const show = async (id) => {
     const localTicket = allTickets.find((ticket) => ticket.id === id);
 
@@ -127,6 +165,7 @@ const setup = () => {
     store,
     destroy,
     update,
+    updateStatus,
 
     show,
     showFullHistory,
